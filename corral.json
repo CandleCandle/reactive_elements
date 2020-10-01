@@ -1,0 +1,8 @@
+{
+  "deps": [
+    {
+      "locator": "github.com/ponylang/reactive_streams.git"
+    }
+  ],
+  "info": {}
+}
