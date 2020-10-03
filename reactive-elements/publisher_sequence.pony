@@ -22,6 +22,7 @@ class _Sub is Subscription
 
     let finish: U32
     let step: U32
+    var active: Bool = true
 
     new iso create(sub': Subscriber[U32], start': U32, finish': U32, step': U32) => 
         sub = sub'
@@ -31,11 +32,12 @@ class _Sub is Subscription
 
     fun ref request(n': U64) =>
         var n = n'
-        while (state < finish) and (n > 0) do
+        while active and (state < finish) and (n > 0) do
             sub.on_next(state)
             state = state + step
             if state >= finish then sub.on_complete() end
             n = n - 1
         end
 
-    fun ref cancel() => None
+    fun ref cancel() =>
+        active = false
