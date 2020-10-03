@@ -49,7 +49,7 @@ object iso is UnitTest
 	fun name(): String => "sequence / unbounded"
 	fun apply(h: TestHelper) =>
         h.long_test(1_000_000_000)
-        let undertest = SequenceProducer(0, 5, 1)
+        let undertest = SequencePublisher(0, 5, 1)
         h.expect_action("basic_subscribe")
         h.expect_action("basic_next_0")
         h.expect_action("basic_next_1")
@@ -64,7 +64,7 @@ object iso is UnitTest
 	fun name(): String => "sequence / single"
 	fun apply(h: TestHelper) =>
         h.long_test(1_000_000_000)
-        let undertest = SequenceProducer(0, 5, 1)
+        let undertest = SequencePublisher(0, 5, 1)
         h.expect_action("basic_subscribe")
         h.expect_action("basic_next_0")
         h.expect_action("basic_next_1")

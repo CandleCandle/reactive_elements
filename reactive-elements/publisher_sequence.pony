@@ -1,7 +1,7 @@
 use "reactive_streams"
 
 
-actor SequenceProducer is Publisher[U32]
+actor SequencePublisher is Publisher[U32]
     let start: U32
     let finish: U32
     let step: U32
