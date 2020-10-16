@@ -4,20 +4,6 @@ use "ponytest"
 use "random"
 
 
-actor _UnboundedTestSubscriber is Subscriber[U32]
-    let helper: TestHelper
-    let name: String
-    new create(h: TestHelper, name': String) =>
-        helper = h
-        name = name'
-    be on_subscribe(s: Subscription iso) =>
-        helper.complete_action(name + "_subscribe")
-        s.request(U64.max_value())
-    be on_next(a: U32) =>
-        helper.complete_action(name + "_next_" + a.string())
-    be on_complete() =>
-        helper.complete_action(name + "_complete")
-
 actor _SingleTestSubscriber is Subscriber[U32]
     let helper: TestHelper
     let name: String
@@ -101,7 +87,7 @@ object iso is UnitTest
         h.expect_action("basic_next_3")
         h.expect_action("basic_next_4")
         h.expect_action("basic_complete")
-        undertest.subscribe(_UnboundedTestSubscriber(h, "basic"))
+        undertest.subscribe(_UnboundedTestSubscriber[U32](h, "basic"))
 end
 
 object iso is UnitTest
