@@ -11,7 +11,6 @@ actor _UnboundedTestSubscriber[A: Any val] is Subscriber[A]
         helper.complete_action(name + "_subscribe")
         s.request(U64.max_value())
     be on_next(a: A) =>
-        //helper.complete_action(name + "_next_")
         match a
         | let a': Stringable val => 
             helper.complete_action(name + "_next_" + a'.string())
