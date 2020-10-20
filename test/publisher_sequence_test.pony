@@ -130,7 +130,7 @@ object iso is UnitTest
         // the following actions may or may not occur
         // therefore subscribers should be aware that
         // they may get data after they have seen a
-        // 'cancel'.
+    // 'cancel'.
         // h.expect_action("basic_next_2")
         // h.expect_action("basic_next_3")
         // h.expect_action("basic_next_4")

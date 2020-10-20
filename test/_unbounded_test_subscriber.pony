@@ -19,3 +19,10 @@ actor _UnboundedTestSubscriber[A: Any val] is Subscriber[A]
         end
     be on_complete() =>
         helper.complete_action(name + "_complete")
+    be on_error(e: ReactiveError) =>
+        match e
+        | let e': Stringable val =>
+            helper.complete_action(name + "_error_" + e'.string())
+        else
+            helper.complete_action(name + "_error_?")
+        end

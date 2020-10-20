@@ -16,18 +16,17 @@ object iso is UnitTest
         h.long_test(1_000_000_000)
 
         let pub = ArrayPublisher[U32]([as U32: 4; 6; 3; 2])
-        let undertest = MapProcessor[U32, U64]({(i: U32) => (i * 2).u64()})
+        let undertest = MapProcessor[U32, U64](pub, {(i: U32) => (i * 2).u64()})
+
+        h.expect_action("map-x2_subscribe")
+        h.expect_action("map-x2_next_8")
+        h.expect_action("map-x2_next_12")
+        h.expect_action("map-x2_next_6")
+        h.expect_action("map-x2_next_4")
+        h.expect_action("map-x2_complete")
+
         let sub = _UnboundedTestSubscriber[U64](h, "map-x2")
-
-        h.expect_action("basic_subscribe")
-        h.expect_action("basic_next_8")
-        h.expect_action("basic_next_12")
-        h.expect_action("basic_next_6")
-        h.expect_action("basic_next_4")
-        h.expect_action("basic_complete")
-
         undertest.subscribe(sub)
-        pub.subscribe(undertest)
 end
 
 ]
