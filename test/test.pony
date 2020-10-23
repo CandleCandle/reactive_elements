@@ -8,6 +8,7 @@ actor Main is TestList
 	fun tag tests(test: PonyTest) =>
 		TestWrapper.tests(_PublisherSequenceTest, test)
 		TestWrapper.tests(_ProcessorMapTest, test)
+		TestWrapper.tests(_ChainBuilderTest, test)
 
 trait TestWrapped
 	fun all_tests(): Array[UnitTest iso]
