@@ -1,7 +1,5 @@
 use "reactive_streams"
 
-// Processor[A: Any #share, B: Any #share] is (Subscriber[A] & Publisher[B])
-
 actor MapProcessor[I: Any #share, O: Any #share] is Processor[I, O]
 
     let publisher: Publisher[I]
