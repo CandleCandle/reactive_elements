@@ -9,6 +9,7 @@ actor Main is TestList
 		TestWrapper.tests(_PublisherSequenceTest, test)
 		TestWrapper.tests(_ProcessorMapTest, test)
 		TestWrapper.tests(_ChainBuilderTest, test)
+		TestWrapper.tests(_FilePublisherTest, test)
 
 trait TestWrapped
 	fun all_tests(): Array[UnitTest iso]

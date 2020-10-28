@@ -1,5 +1,6 @@
 use "reactive_streams"
 
+// "transform" / "extract"
 
 class ChainBuilder[I: Any #share]
     let p: Publisher[I]
@@ -18,3 +19,10 @@ class ChainBuilder[I: Any #share]
 
     fun subscribe(subscriber: Subscriber[I]) =>
         p.subscribe(subscriber)
+
+    fun subscribe_when() =>
+        """
+        count of subscribers?
+        predicate?
+        signal from another publisher?
+        """
