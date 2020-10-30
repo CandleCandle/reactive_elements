@@ -1,12 +1,14 @@
 use "reactive_streams"
 
+primitive EachReactiveError is ReactiveError
+
 actor EachProcessor[I: Any #share] is Processor[I, I]
 
     let publisher: Publisher[I]
-    let action: {(I): I} iso
+    let action: {(I): I ?} iso
     var subscriber: (None | Subscriber[I]) = None
 
-    new create(publisher': Publisher[I], action': {(I): I} iso) =>
+    new create(publisher': Publisher[I], action': {(I): I ?} iso) =>
         """
         Side-effect processor. The action should return the
         input verbatim
@@ -24,8 +26,14 @@ actor EachProcessor[I: Any #share] is Processor[I, I]
         try (subscriber as Subscriber[I]).on_subscribe(consume s) end
 
     be on_next(a: I) =>
-        let a' = action(consume a)
-        try (subscriber as Subscriber[I]).on_next(consume a') end
+        match subscriber
+        | let s: Subscriber[I] =>
+            try
+                s.on_next(action(consume a)?)
+            else
+                s.on_error(EachReactiveError)
+            end
+        end
 
     be on_error(e: ReactiveError) =>
         try (subscriber as Subscriber[I]).on_error(e) end
