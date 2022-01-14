@@ -2,6 +2,12 @@ use "reactive_streams"
 
 primitive MapReactiveError is ReactiveError
 
+
+trait ChainBuilderMap[I: Any #share] is ChainBuilderMixin[I]
+    fun map[O: Any #share](action: {(I): O ?} iso): ChainBuilder[O] =>
+        ChainBuilder[O].from(MapProcessor[I, O](_publisher(), consume action))
+
+
 actor MapProcessor[I: Any #share, O: Any #share] is (Subscriber[I] & ManagedPublisher[O])
 
     let publisher: Publisher[I]

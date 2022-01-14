@@ -2,6 +2,12 @@ use "reactive_streams"
 
 primitive EachReactiveError is ReactiveError
 
+
+trait ChainBuilderEach[I: Any #share] is ChainBuilderMixin[I]
+    fun onEach(action: {(I): I ?} iso): ChainBuilder[I] =>
+        ChainBuilder[I].from(EachProcessor[I](_publisher(), consume action))
+
+
 actor EachProcessor[I: Any #share] is Processor[I, I]
 
     let publisher: Publisher[I]
