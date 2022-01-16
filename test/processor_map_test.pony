@@ -16,7 +16,7 @@ object iso is UnitTest
         h.long_test(1_000_000_000)
 
         let pub = ArrayPublisher[U32]([as U32: 4; 6; 3; 2])
-        let undertest = MapProcessor[U32, U64](pub, {(i: U32) => (i * 2).u64()})
+        let undertest = MapProcessor[U32, U64].unicast(pub, {(i: U32) => (i * 2).u64()})
 
         h.expect_action("map-x2_subscribe")
         h.expect_action("map-x2_next_8")

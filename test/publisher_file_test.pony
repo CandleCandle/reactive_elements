@@ -24,7 +24,7 @@ object iso is UnitTest
         h.expect_action("file_next_text")
         h.expect_action("file_complete")
 
-        let mp = MapProcessor[Array[U8] val, String val](undertest, {(a): String => String.from_array(a)})
+        let mp = MapProcessor[Array[U8] val, String val].unicast(undertest, {(a): String => String.from_array(a)})
         mp.subscribe(_UnboundedTestSubscriber[String](h, "file"))
 end
 

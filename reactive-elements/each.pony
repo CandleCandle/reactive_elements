@@ -5,6 +5,11 @@ primitive EachReactiveError is ReactiveError
 
 trait ChainBuilderEach[I: Any #share] is ChainBuilderMixin[I]
     fun onEach(action: {(I): I ?} iso): ChainBuilder[I] =>
+        """
+        Trigger Side-effects without modifying the input.
+        no-op action might look like:
+        {(input: I: Any #share): I => consume input}
+        """
         ChainBuilder[I].from(EachProcessor[I](_publisher(), consume action))
 
 
@@ -15,12 +20,6 @@ actor EachProcessor[I: Any #share] is Processor[I, I]
     var subscriber: (None | Subscriber[I]) = None
 
     new create(publisher': Publisher[I], action': {(I): I ?} iso) =>
-        """
-        Side-effect processor. The action should return the
-        input verbatim
-        no-op action might look like:
-        {(input: I: Any #share): I => consume input}
-        """
         publisher = publisher'
         action = consume action'
 

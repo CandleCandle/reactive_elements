@@ -4,8 +4,17 @@ primitive MapReactiveError is ReactiveError
 
 
 trait ChainBuilderMap[I: Any #share] is ChainBuilderMixin[I]
-    fun map[O: Any #share](action: {(I): O ?} iso): ChainBuilder[O] =>
-        ChainBuilder[O].from(MapProcessor[I, O](_publisher(), consume action))
+    fun map_b[O: Any #share](action: {(I): O ?} iso): ChainBuilder[O] =>
+        """
+        Convert one type to another. Allowing multiple subscribers
+        """
+        ChainBuilder[O].from(MapProcessor[I, O].broadcast(_publisher(), consume action))
+
+    fun map_u[O: Any #share](action: {(I): O ?} iso): ChainBuilder[O] =>
+        """
+        Convert one type to another. Allowing a single subscriber
+        """
+        ChainBuilder[O].from(MapProcessor[I, O].unicast(_publisher(), consume action))
 
 
 actor MapProcessor[I: Any #share, O: Any #share] is (Subscriber[I] & ManagedPublisher[O])
@@ -17,10 +26,15 @@ actor MapProcessor[I: Any #share, O: Any #share] is (Subscriber[I] & ManagedPubl
 
     let _subscriber_manager': SubscriberManager[O]
 
-    new create(publisher': Publisher[I], action': {(I): O ?} iso) =>
+    new broadcast(publisher': Publisher[I], action': {(I): O ?} iso) =>
         publisher = publisher'
         action = consume action'
         _subscriber_manager' = Broadcast[O].create(this)
+
+    new unicast(publisher': Publisher[I], action': {(I): O ?} iso) =>
+        publisher = publisher'
+        action = consume action'
+        _subscriber_manager' = Unicast[O].create(this)
 
     fun ref _subscriber_manager(): SubscriberManager[O] =>
         _subscriber_manager'

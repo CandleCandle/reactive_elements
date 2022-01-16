@@ -27,7 +27,7 @@ object iso is UnitTest
 
         ChainBuilder[U32].from(ArrayPublisher[U32]([as U32: 3; 7]))
                 .using[U32]({(p: Publisher[U32]): Processor[U32, U32] => _HelperActionProcessor[U32].create(p, h, "input")})
-                .map[U64]({(i: U32) => (i * 2).u64()})
+                .map_u[U64]({(i: U32) => (i * 2).u64()})
                 .using[U64]({(p: Publisher[U64]): Processor[U64, U64] => _HelperActionProcessor[U64].create(p, h, "output")})
                 .subscribe(_UnboundedTestSubscriber[U64](h, "sub"))
 end
@@ -53,7 +53,7 @@ object iso is UnitTest
         ChainBuilder[U32].from(ArrayPublisher[U32]([as U32: 3; 7]))
                 .using[U32]({(p: Publisher[U32]): Processor[U32, U32] => _HelperActionProcessor[U32].create(p, h, "input")})
                 .transform[U64]({(from: ChainBuilder[U32] val): ChainBuilder[U64] val =>
-                                from.map[U64]({(i: U32) => (i * 2).u64()})
+                                from.map_b[U64]({(i: U32) => (i * 2).u64()})
                         }
                 )
                 .using[U64]({(p: Publisher[U64]): Processor[U64, U64] => _HelperActionProcessor[U64].create(p, h, "output")})
