@@ -1,6 +1,6 @@
 use "reactive_streams"
 use "../reactive-elements"
-use "ponytest"
+use "pony_test"
 use "random"
 
 primitive _ChainBuilderTest is TestWrapped
@@ -25,9 +25,11 @@ object iso is UnitTest
         h.expect_action("sub_next_14")
         h.expect_action("sub_complete")
 
+        let d : {(U32): U64 ?} iso = recover iso {(i: U32) => (i * 2).u64()} end
+
         ChainBuilder[U32].from(ArrayPublisher[U32]([as U32: 3; 7]))
                 .using[U32]({(p: Publisher[U32]): Processor[U32, U32] => _HelperActionProcessor[U32].create(p, h, "input")})
-                .map_u[U64]({(i: U32) => (i * 2).u64()})
+                .map_u[U64](consume d)
                 .using[U64]({(p: Publisher[U64]): Processor[U64, U64] => _HelperActionProcessor[U64].create(p, h, "output")})
                 .subscribe(_UnboundedTestSubscriber[U64](h, "sub"))
 end

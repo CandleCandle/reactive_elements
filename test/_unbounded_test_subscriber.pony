@@ -1,5 +1,5 @@
 use "reactive_streams"
-use "ponytest"
+use "pony_test"
 
 actor _UnboundedTestSubscriber[A: Any val] is Subscriber[A]
     let helper: TestHelper
@@ -12,7 +12,7 @@ actor _UnboundedTestSubscriber[A: Any val] is Subscriber[A]
         s.request(U64.max_value())
     be on_next(a: A) =>
         match a
-        | let a': Stringable val => 
+        | let a': Stringable val =>
             helper.complete_action(name + "_next_" + a'.string())
         else
             helper.complete_action(name + "_next_?")

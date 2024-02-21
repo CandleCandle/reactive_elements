@@ -20,33 +20,33 @@ actor FilePublisher is ManagedPublisher[Array[U8] val]
         _path = path
         _max_bytes = max_bytes
 
-    fun ref _subscriber_manager(): SubscriberManager[Array[U8] val] =>
+    fun ref subscriber_manager(): SubscriberManager[Array[U8] val] =>
         _sub_manager
 
     be subscribe(s: Subscriber[Array[U8] val]) =>
-        _subscriber_manager().on_subscribe(s)
+        subscriber_manager().on_subscribe(s)
 
         match OpenFile(_path)
         | let file: File => _file = file
-        | let err: FileErrNo => _subscriber_manager().on_error(FilePublisherError(err))
+        | let err: FileErrNo => subscriber_manager().on_error(FilePublisherError(err))
         end
 
     be on_request(s: Subscriber[Array[U8] val], n: U64) =>
         """
         A ManagedPublisher must respond by calling SubscriberManager._on_request.
         """
-        _subscriber_manager().on_request(s, n)
+        subscriber_manager().on_request(s, n)
 
         match _file
         | let file: File =>
             var count = n
             while (file.errno() is FileOK) and (count > 0) do
                 let data = file.read(_max_bytes)
-                if (data.size() > 0) then _subscriber_manager().publish(consume data) end
+                if (data.size() > 0) then subscriber_manager().publish(consume data) end
                 count = count - 1
             end
-            if (not (file.errno() is FileOK)) then 
-                _subscriber_manager().on_complete()
+            if (not (file.errno() is FileOK)) then
+                subscriber_manager().on_complete()
                 _file = file.dispose()
             end
         end

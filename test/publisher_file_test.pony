@@ -1,6 +1,6 @@
 use "reactive_streams"
 use "../reactive-elements"
-use "ponytest"
+use "pony_test"
 use "files"
 
 
@@ -12,11 +12,11 @@ primitive _FilePublisherTest is TestWrapped
 
 object iso is UnitTest
 	fun name(): String => "file / publish"
-	fun apply(h: TestHelper) ? =>
+	fun apply(h: TestHelper) =>
         h.long_test(1_000_000_000)
 
         let file_name = "test/fixtures/file_blob.txt"
-        let undertest = FilePublisher(FilePath(h.env.root as AmbientAuth, file_name)?, 4)
+        let undertest = FilePublisher(FilePath(FileAuth(h.env.root), file_name), 4)
 
         h.expect_action("file_subscribe")
         h.expect_action("file_next_blob")

@@ -1,9 +1,17 @@
 {
+  "packages": [],
   "deps": [
     {
       "locator": "github.com/ponylang/reactive_streams.git",
-      "version": "0.1.1"
+      "version": "0.2.1"
     }
   ],
-  "info": {}
+  "info": {
+    "description": "",
+    "homepage": "",
+    "license": "",
+    "documentation_url": "",
+    "version": "",
+    "name": ""
+  }
 }

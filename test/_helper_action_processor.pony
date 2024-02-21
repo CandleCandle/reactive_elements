@@ -1,5 +1,5 @@
 use "reactive_streams"
-use "ponytest"
+use "pony_test"
 
 actor _HelperActionProcessor[A: Any val] is Processor[A, A]
     let helper: TestHelper
@@ -19,7 +19,7 @@ actor _HelperActionProcessor[A: Any val] is Processor[A, A]
         try (subscriber as Subscriber[A]).on_subscribe(consume s) end
     be on_next(a: A) =>
         match a
-        | let a': Stringable val => 
+        | let a': Stringable val =>
             helper.complete_action(name + "_next_" + a'.string())
         else
             helper.complete_action(name + "_next_?")

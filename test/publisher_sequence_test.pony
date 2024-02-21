@@ -1,6 +1,6 @@
 use "reactive_streams"
 use "../reactive-elements"
-use "ponytest"
+use "pony_test"
 use "random"
 
 
@@ -25,7 +25,7 @@ actor _SingleTestSubscriber is Subscriber[U32]
     be on_complete() =>
         helper.complete_action(name + "_complete")
         sub = None
-        
+
 actor _CancellingTestSubscriber is Subscriber[U32]
     let helper: TestHelper
     let name: String
@@ -48,7 +48,7 @@ actor _CancellingTestSubscriber is Subscriber[U32]
         end
     be on_complete() =>
         helper.complete_action(name + "_complete")
-        
+
 actor _CancellingUnboundedTestSubscriber is Subscriber[U32]
     let helper: TestHelper
     let name: String

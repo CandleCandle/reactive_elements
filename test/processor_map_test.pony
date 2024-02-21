@@ -1,6 +1,6 @@
 use "reactive_streams"
 use "../reactive-elements"
-use "ponytest"
+use "pony_test"
 use "random"
 
 

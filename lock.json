@@ -1,7 +1,8 @@
 {
   "locks": [
     {
-      "locator": "github.com/ponylang/reactive_streams.git"
+      "locator": "github.com/ponylang/reactive_streams.git",
+      "revision": ""
     }
   ]
 }
