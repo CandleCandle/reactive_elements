@@ -1,0 +1,45 @@
+@startuml processor-subscription-pattern
+
+
+actor Publisher
+actor Processor
+actor Subscriber
+
+== No caching of request: Request message is handled ==
+
+Processor <- Subscriber : "subscribe"
+activate Subscriber
+Publisher <- Processor : "subscribe"
+Publisher -> Processor : "on_subscribe"
+Processor -> Subscriber : "on_subscribe"
+Processor <- Subscriber : "request N"
+deactivate Subscriber
+Publisher <- Processor : "request N"
+note right of Publisher
+The "request N" message from the subscriber
+is passes to the Publisher via the
+"Subscription" object that was provided by
+the "on_subscribe" message
+end note
+Publisher -> Processor : "on_next A"
+Processor -> Subscriber : "on_next A"
+
+== No caching of request: Request message is lost ==
+
+
+Processor <- Subscriber : "subscribe"
+activate Subscriber
+Publisher <- Processor : "subscribe"
+Processor -> Subscriber : "on_subscribe"
+Processor <- Subscriber : "request N"
+deactivate Subscriber
+Publisher -> Processor : "on_subscribe"
+Publisher x<-- Processor : "request N"
+note right of Publisher
+The "request N" message from the subscriber
+is lost because the Processor has not
+received the "on_subscribe" message that
+contains the "Subscription" object.
+end note
+
+@enduml
